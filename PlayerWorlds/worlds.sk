@@ -2,33 +2,55 @@ command /world [<text>] [<player>] [<integer>]:
 	aliases: /playerworlds:world
 	trigger:
 		if arg-1 is "join":
-			if world "world%{arg-3}%_%arg-player's uuid%" exists:
-				teleport player to location(0, -60, 0, world("world%{arg-3}%_%arg-player's uuid%"))
+			if arg-2 is set:
+				if arg-3 is set:
+					if world "world%{arg-3}%_%arg-player's uuid%" exists:
+						send "&aTeleporting..." to player
+						teleport player to location(0, -60, 0, world("world%{arg-3}%_%arg-player's uuid%"))
+					else:
+						send "&cWorld doesn't exist..." to player
 		else if arg-1 is "create":
 			if player has permission "worlds.4":
-				if {worldscreated::%player's uuid%} =< 4:
+				if {worldscreated::%player's uuid%} >= 4:
 					send "&cYou have reached the world creation limit &7(4/4)" to player
-				else if {worldscreated::%player's uuid%} => 4:
-					execuite console command "mv create world%{worldscreated::%player's uuid%}+1%_%player's uuid%"
-			else if player has permission "worlds.3":
-				if {worldscreated::%player's uuid%} =< 3:
-					send "&cYou have reached the world creation limit &7(3/3)" to player
-				else if {worldscreated::%player's uuid%} => 3:
-					execuite console command "mv create world%{worldscreated::%player's uuid%}+1%_%player's uuid%"
-			else if player has permission "worlds.2":
-				if {worldscreated::%player's uuid%} =< 2:
-					send "&cYou have reached the world creation limit &7(2/2)" to player
-				else if {worldscreated::%player's uuid%} => 2:
-					execuite console command "mv create world%{worldscreated::%player's uuid%}+1%_%player's uuid%"
-			else if player has permission "worlds.1":
-				if {worldscreated::%player's uuid%} =< 1:
-					send "&cYou have reached the world creation limit &7(1/1)" to player
-				else if {worldscreated::%player's uuid%} => 1:
-					execuite console command "mv create world%{worldscreated::%player's uuid%}+1%_%player's uuid%"
+				else if {worldscreated::%player's uuid%} <= 4:
+					execute console command "mv create world%{worldscreated::%player's uuid%}+1%_%player's uuid% normal -t flat"
 					add 1 to {worldscreated::%player's uuid%}
-					send "" to player
+					send "&aCreating world %{worldscreated::%player's uuid%}%" to player
+					send "&aPlease wait for the world to be created" to player
+					send "&aYou can use /join %player% %{worldscreated::%player's uuid%}%" to player
+			else if player has permission "worlds.3":
+				if {worldscreated::%player's uuid%} >= 3:
+					send "&cYou have reached the world creation limit &7(3/3)" to player
+				else if {worldscreated::%player's uuid%} <= 3:
+					execute console command "mv create world%{worldscreated::%player's uuid%}+1%_%player's uuid% normal -t flat"
+					add 1 to {worldscreated::%player's uuid%}
+					send "&aCreating world %{worldscreated::%player's uuid%}%" to player
+					send "&aPlease wait for the world to be created" to player
+					send "&aYou can use /join %player% %{worldscreated::%player's uuid%}%" to player
+			else if player has permission "worlds.2":
+				if {worldscreated::%player's uuid%} >= 2:
+					send "&cYou have reached the world creation limit &7(2/2)" to player
+				else if {worldscreated::%player's uuid%} <= 2:
+					execute console command "mv create world%{worldscreated::%player's uuid%}+1%_%player's uuid% normal -t flat"
+					add 1 to {worldscreated::%player's uuid%}
+					send "&aCreating world %{worldscreated::%player's uuid%}%" to player
+					send "&aPlease wait for the world to be created" to player
+					send "&aYou can use /join %player% %{worldscreated::%player's uuid%}%" to player
+			else if player has permission "worlds.1":
+				if {worldscreated::%player's uuid%} >= 1:
+					send "&cYou have reached the world creation limit &7(1/1)" to player
+				else if {worldscreated::%player's uuid%} <= 1:
+					execute console command "mv create world%{worldscreated::%player's uuid%}+1%_%player's uuid% normal -t flat"
+					add 1 to {worldscreated::%player's uuid%}
+					send "&aCreating world %{worldscreated::%player's uuid%}%" to player
+					send "&aPlease wait for the world to be created" to player
+					send "&aYou can use /join %player% %{worldscreated::%player's uuid%}%" to player
 
-
+command /fixcreated:
+	permission: op
+	trigger:
+		set {worldscreated::%player's uuid%} to 0
 
 on break:
 	if player's world does not contain player's uuid:
