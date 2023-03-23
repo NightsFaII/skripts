@@ -1,0 +1,10 @@
+command /world [<text>] [<player>] [<integer>]:
+	aliases: /playerworlds:world
+	trigger:
+		if arg-1 is "create":
+			loop player's permissions:
+				if loop-text contains "worlds.":
+					set {_worldsmax1::*} to loop-permission split at "."
+					set {_worldsmax} to {_worldsmax::1}
+					send "%{_worldsmax}%" to player
+					send "%{_worldsmax1::0}%" to player
